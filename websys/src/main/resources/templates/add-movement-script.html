@@ -1,0 +1,346 @@
+<script type="text/x-template" id="add-movement">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form @submit="checkForm" method="post" novalidate>
+                    <div class="form-row">
+                        
+                        <!--
+                            <div v-show="!orcamento" class="form-group col-md-12 mb-4">
+                                <input id="enableEdit" name="enableEdit" type="checkbox" v-model="lock">
+                                <label class="form-check-label" for="enableEdit">Bloquear edição</label>
+                            </div>
+                        -->
+                        
+                        <div class="form-group col-md-12 mb-1 mt-3">
+                            <h4>{{orcamento ? 'Novo Orçamento de ' : 'Nova ' }}{{type=='V' ? 'Venda' : 'Compra'}}</h4>
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Descrição </label>
+                            <input :disabled="lock" v-model="name"  type="text" class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Código </label>
+                            <input disabled v-model="externalId" type="text" class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>{{type=='V' ? 'Cliente' : 'Fornecedor'}} <a v-show="!lock" href="javascript:;" v-on:click="listCadastros()">visualizar</a></label>
+                            <select :disabled="lock" class="form-control" v-model="cadastroId" >
+                                <option v-for="elm in cadastros" v-bind:value="elm.id">{{elm.name}}</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Custo de Frete</label>
+                            <input :disabled="lock" v-model.lazy="freight" money type="text" class="form-control text-right" placeholder="0.00">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Outros Custos</label>
+                            <input :disabled="lock" v-model.lazy="otherCosts" money type="text" class="form-control text-right" placeholder="0.00">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Total</label>
+                            <input :disabled="lock" v-model.lazy="total" money type="text" class="form-control text-right" placeholder="0.00">
+                            <small class="form-text text-muted">R$ {{calcTotal}}</small>
+                        </div>
+                        
+            
+                        <div class="form-group col-md-12 mb-4 pb-3">
+                            <input :disabled="lock" id="enableCosts" name="enableCosts" type="checkbox" v-model="enableCosts">
+                            <label class="form-check-label" for="enableCosts">Incluir custos na soma do total</label>
+                        </div>
+                        
+                        
+                        
+                        
+                        
+                        <!-- begin produtos -->
+                        <div v-show="id>0 && serviceItems.length==0" class="card w-100 mb-4">
+                            <div class="card-header">Produtos</div>
+                            <div>
+                                
+                                <div v-show="items.length>0" class="small form-row col-md-12 ml-0 mr-0 pl-0 pr-0">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Produto</th>
+                                                <th class="text-right">Preço Un.</th>
+                                                <th class="text-right">Preço Un. Atual de {{type=='V' ? 'Venda' : 'Compra' }}</th>
+                                                <th class="text-right">Quantidade</th>
+                                                <th class="text-right">SubTotal</th>
+                                                <th v-show="!lock"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="item in items">
+                                                <td>{{item.productName}} - {{item.skuName}}</td>
+                                                <td class="text-right">R$ {{item.unitPrice}}</td>
+                                                <td class="text-right">R$ {{type=='V' ? item.productPrice : item.productCost }}</td>
+                                                <td class="text-right">{{item.qtd}}</td>
+                                                <td class="text-right">R$ {{item.subTotal}}</td>
+                                                <td v-show="!lock" class="text-right">
+                                                    &nbsp;
+                                                    <a href="javascript:;" v-on:click="editItem(item.id)"><i class="fa fa-pencil-alt"></i></a>
+                                                    &nbsp;
+                                                    <a href="javascript:;" v-on:click="removeItem(item.id)"><i class="fa fa-trash-alt"></i></a>
+                                                    &nbsp;&nbsp;
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                
+                                
+                                
+                                
+                                <div v-show="!showFormAddProduct && id>0 && !lock"  class="form-group ml-2 mt-3">
+                                    <button type="button" class="btn btn-primary" v-on:click="addProduct()">Adicionar Produto</button>
+                                </div>
+                                
+                                
+                                
+                                <div v-show="showFormAddProduct && !lock" class="form-row ml-2 mr-2">
+                                    <div class="form-group col-md-12 mb-1 mt-3">
+                                        <h4>Adicionar Produto</h4>
+                                    </div>
+                                    <div class="form-group col-md-4 mb-4">
+                                        <label>Produto <a v-show="itemId==0" href="javascript:;" v-on:click="addProduct()">alterar</a></label>
+                                        <input v-model="selectedProduct.name" disabled type="text" class="form-control" placeholder="">
+                                        <small id class="form-text text-muted"></small>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-4 mb-4">
+                                        <label>Variação</label> 
+                                        <select v-show="itemId==0" class="form-control" v-model="selectedSKU" >
+                                            <option v-for="elm in productSkus" v-bind:value="elm" >
+                                                {{elm.name}}
+                                            </option>
+                                        </select>
+                                        <input v-show="itemId>0" v-model="selectedSKU.name" disabled type="text" class="form-control" placeholder="">
+                                        <small id class="form-text text-muted"></small>
+                                    </div>
+                                    <div class="form-group col-md-4 mb-4">
+                                        <label>Quantidade</label>
+                                        <input v-model="qtd" type="number" class="form-control" placeholder="" @change="calcSubTotal()">
+                                        <small id class="form-text text-muted">{{selectedSKU.estoque}} em estoque</small>
+                                    </div>
+                                    
+                                    
+                                    
+                                    <div class="form-group col-md-3 mb-4">
+                                        <label>Preço de {{type=='V' ? 'Venda' : 'Compra'}} Unit</label>
+                                        <input v-model="unitPrice" type="number" class="form-control" placeholder="" @change="calcSubTotal()">
+                                        <small id class="form-text text-muted">Preço de {{type=='V' ? 'Venda' : 'Compra'}}: R$ {{type=='V' ? selectedProduct.price : selectedProduct.cost }} </small>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 mb-4">
+                                        <label>Subtotal</label>
+                                        <input v-model="subTotal" type="number" class="form-control" placeholder="">
+                                        <small id class="form-text text-muted">R$ {{type=='V' ? selectedProduct.price : selectedProduct.cost }} x {{qtd}} = R$ {{type=='V' ? (selectedProduct.price*qtd).round(2) : (selectedProduct.cost*qtd).round(2) }} </small>
+                                    </div>
+                                    
+                                    <div v-show="orcamento" class="form-group col-md-3 mb-4">
+                                        <label>&nbsp;</label><br />
+                                        <button type="button" class="btn btn-primary btn-block" v-on:click="addMovementItem(false)">{{sending ? 'Aguarde...' : (itemId>0 ? 'Salvar Alterações' : 'Adicionar Item')}}</button>
+                                        <small id class="form-text text-muted"></small>
+                                    </div> 
+                                    
+                                    <div v-show="orcamento" class="form-group col-md-3 mb-4">
+                                        <label>&nbsp;</label><br />
+                                        <button type="button" class="btn btn-secondary btn-block" v-on:click="showFormAddProduct=false">Cancelar</button>
+                                        <small id class="form-text text-muted"></small>
+                                    </div> 
+                                    
+                                    <!--
+                                        <div v-show="!orcamento" class="form-group col-md-4 mb-4">
+                                            <label>&nbsp;</label><br />
+                                            <button type="button" class="btn btn-primary btn-block" v-on:click="addMovementItem(true)">{{sending ? 'Aguarde...' : (itemId>0 ? 'Salvar e Ajustar Estoque' : 'Adicionar e Ajustar Estoque')}}</button>
+                                            <small id class="form-text text-muted"></small>
+                                        </div> 
+                                        
+                                        <div v-show="!orcamento" class="form-group col-md-4 mb-4">
+                                            <label>&nbsp;</label><br />
+                                            <button type="button" class="btn btn-primary btn-block" v-on:click="addMovementItem(false)">{{sending ? 'Aguarde...' : (itemId>0 ? 'Salvar sem Ajustar Estoque' : 'Adicionar sem Ajustar Estoque')}}</button>
+                                            <small id class="form-text text-muted"></small>
+                                        </div> 
+                                        
+                                        <div v-show="!orcamento" class="form-group col-md-4 mb-4">
+                                            <label>&nbsp;</label><br />
+                                            <button type="button" class="btn btn-secondary btn-block" v-on:click="showFormAddProduct=false">Cancelar</button>
+                                            <small id class="form-text text-muted"></small>
+                                        </div> 
+                                    -->
+                                    
+                                </div>
+                                
+                                
+                                
+                            </div>
+                        </div>
+                        <!-- end produtos -->
+                        
+                        
+                        
+                        
+                        
+                        <!-- begin serviços -->
+                        <div v-show="id>0 && type=='V' && items.length==0" class="card w-100 mb-4">
+                            <div class="card-header">Serviços</div>
+                            <div>
+                                <div v-show="serviceItems.length>0" class="small form-row col-md-12 ml-0 mr-0 pl-0 pr-0">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Serviço</th>
+                                                <th class="text-right">Preço</th>
+                                                <th class="text-right">SubTotal</th>
+                                                <th v-show="!lock" ></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="item in serviceItems">
+                                                <td>{{item.serviceName}}</td>
+                                                <td class="text-right">R$ {{item.servicePrice}}</td>
+                                                <td class="text-right">R$ {{item.subTotal}}</td>
+                                                <td v-show="!lock" class="text-right">
+                                                    &nbsp;
+                                                    <a href="javascript:;" v-on:click="editServiceItem(item.id)"><i class="fa fa-pencil-alt"></i></a>
+                                                    &nbsp;
+                                                    <a href="javascript:;" v-on:click="removeServiceItem(item.id)"><i class="fa fa-trash-alt"></i></a>
+                                                    &nbsp;&nbsp;
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                
+                                <div v-show="!showFormAddService && id>0 && !lock"  class="form-group ml-2 mt-3">
+                                    <button type="button" class="btn btn-primary" v-on:click="addService()">Adicionar Serviço</button>
+                                </div>
+                                
+                                
+                                
+                                <div v-show="showFormAddService && !lock" class="form-row ml-2 mr-2">
+                                    <div class="form-group col-md-12 mb-1 mt-3">
+                                        <h4>Adicionar Serviço</h4>
+                                    </div>
+                                    <div class="form-group col-md-4 mb-4">
+                                        <label>Serviço <a v-show="serviceItemId==0" href="javascript:;" v-on:click="addService()">alterar</a></label>
+                                        <input v-model="selectedService.name" disabled type="text" class="form-control" placeholder="">
+                                        <small class="form-text text-muted"></small>
+                                    </div>
+                                    
+                                    
+                                    <div class="form-group col-md-2 mb-4">
+                                        <label>Subtotal</label>
+                                        <input v-model="serviceSubTotal" type="number" class="form-control" placeholder="">
+                                        <small class="form-text text-muted">R$ {{selectedService.price }}</small>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-3 mb-4">
+                                        <label>&nbsp;</label><br />
+                                        <button type="button" class="btn btn-primary btn-block" v-on:click="addServiceItem()">{{sending ? 'Aguarde...' : (serviceItemId>0 ? 'Salvar Alterações' : 'Adicionar Item')}}</button>
+                                        <small class="form-text text-muted"></small>
+                                    </div> 
+                                    
+                                    <div class="form-group col-md-3">
+                                        <label>&nbsp;</label><br />
+                                        <button type="button" class="btn btn-secondary btn-block" v-on:click="showFormAddService=false">Cancelar</button>
+                                        <small class="form-text text-muted"></small>
+                                    </div> 
+                                    
+                                </div>
+                                
+                            </div> 
+                        </div>
+                        <!-- end serviços -->
+                        
+                        
+                        
+                        
+                        
+                        <!-- begin parcelas -->
+                        <div v-show="id>0" class="card w-100 mb-4">
+                            <div class="card-header">Parcelas</div>
+                            <div>
+                                <div v-show="accounts.length>0" class="small form-row col-md-12 ml-0 mr-0 pl-0 pr-0">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Vencimento</th>
+                                                <th class="text-right">Valor</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="item in accounts">
+                                                <td>{{item.expirationDate}}</td>
+                                                <td class="text-right">R$ {{item.value}}</td>
+                                                <td>{{item.paid ? 'Pago' : 'Em aberto'}}</td>
+                                                <td class="text-right">
+                                                    &nbsp;
+                                                    <a href="javascript:;" v-on:click="duplicateAccount(item.id)"><i class="fas fa-copy"></i></a>
+                                                    &nbsp;
+                                                    <a href="javascript:;" v-on:click="editAccount(item.id)"><i class="fa fa-pencil-alt"></i></a>
+                                                    &nbsp;
+                                                    <a href="javascript:;" v-on:click="removeAccount(item.id)"><i class="fa fa-trash-alt"></i></a>
+                                                    &nbsp;&nbsp;
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                
+                                <div v-show="id>0"  class="form-group ml-2 mt-3">
+                                    <button type="button" class="btn btn-primary" v-on:click="addAccounts()">Adicionar Parcela</button>
+                                </div>
+                                
+                                
+                            </div> 
+                        </div>
+                        <!-- end parcelas -->
+                        
+                        
+                        
+                        <!-- botão salvar e avançar / salvar-->
+                        <div v-show="id==0 && !lock" class="form-group col-md-6 mb-4">
+                            <button type="submit" class="btn btn-primary">Salvar e Avançar</button>
+                        </div>
+                        <div v-show="!showFormAddProduct && !showFormAddService && id>0 && !lock"  class="form-group col-md-6 mb-4 ">
+                            <button type="submit" class="btn btn-primary btn-block">{{buttonText()}}</button>
+                        </div>
+                        
+                        
+                        <!-- botão orçamento-->
+                        <div v-show="(items.length>0 || serviceItems.length>0) && !showFormAddProduct && !showFormAddService && id>0 && this.orcamento && !(type=='V' && items.length>0) "  class="form-group col-md-6 mb-4">
+                            <button type="button" v-on:click="convertToTransaction()" class="btn btn-secondary btn-block">Converter Orçamento em {{type=='V' ? 'Venda' : 'Compra'}}</button>
+                        </div>
+                        
+                        <div v-show="items.length>0 && orcamento"  class="form-group col-md-6 mb-4">
+                            <button type="button btn-block" v-on:click="addNFe()" class="btn btn-primary btn-block">Emitir Nota Fiscal</button>
+                        </div>
+                        
+                        <div v-show="id>0 && nfeChave.length==0 && !orcamento"  class="form-group col-md-6 mb-4">
+                            <button type="button btn-block" v-on:click="cancelTransaction()" class="btn btn-secondary btn-block">Converter {{type=='V' ? 'Venda' : 'Compra'}} em Orçamento</button>
+                        </div>
+                        
+                        
+                        <br />
+                        <br />
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</script>

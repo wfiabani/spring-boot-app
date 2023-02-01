@@ -1,0 +1,25 @@
+<script type="text/x-template" id="xml-loader">
+    <div class="container-fluid">
+        <div class="row" >
+            <div class="col-md-12" >
+                
+                <form @submit="checkForm" method="post" >
+                    <div class="form-row">
+                        
+                        <div class="form-group col-md-12 mt-3 mb-0">
+                            <h5>Importar Nota Fiscal Eletrônica</h5>
+                        </div>
+                        <div class="form-group col-md-4 pt-3">
+                            <input id="xmlFile" type="file" name="files[]" multiple /> 
+                        </div>
+                        
+                        <div class="form-group col">
+                            <button type="submit" class="btn btn-primary mt-3">{{buttonText()}}</button>
+                        </div>
+                        
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</script>

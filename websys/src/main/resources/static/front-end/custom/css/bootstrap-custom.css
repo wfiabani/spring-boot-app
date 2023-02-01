@@ -1,0 +1,89 @@
+.modal { overflow: auto !important; }
+
+html{height: 100%;}
+body{height: 100%;}
+
+#app{
+    height: 100%;
+    display: flex;
+}
+#left-menu{
+    min-width: 65px;
+    background-color: #000;
+    flex: 0 0 auto;
+    padding-top: 10px;
+}
+#left-menu a{
+    display: block;
+    width: 70%;
+    height: auto;
+    padding: 9px 0;
+    margin: 0 15%;
+    text-align: center;
+    text-decoration: none;
+    color:#A5CDCC;
+}
+#left-menu a:hover{
+    text-decoration: none;
+    color: #fff;
+}
+#left-menu a i{
+    color: #fff;
+    font-size: 22px;
+}
+#content{
+    background-color: #efefef;
+    flex: 1 1 auto;
+    overflow-x: auto;
+}
+h4.custom-title{
+    font-weight: bold;
+    font-size: 18px;
+    background-image: linear-gradient(to bottom, #dadada, #fff, #efefef);
+    margin-bottom: 0 !important;
+    padding: 15px 0;
+    color: #0DC8D9;
+}
+.borderless td, .borderless th {
+    border: none;
+}
+
+
+
+.container-finances{
+    display: flex;
+    height: 700px;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+}
+.container-finances > div{
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    flex-grow: 1;
+    position: relative;
+    padding-top: 50px;
+}
+.container-finances > div > span{
+    position: absolute;
+    color: #333;
+    top: 0;
+    text-align: center;
+    width: 100%;
+    font-size: 10px;
+}
+.container-finances > div > div{
+    width: 50%;
+    writing-mode: vertical-rl;
+    transform: rotate(-180deg);
+    padding-top: 10px;
+    color: #fff;
+    font-size: 12px;
+}
+.container-finances > div > div:first-child{
+    background-color: #14C3B6;
+}
+.container-finances > div > div:last-child{
+    background-color: #FE756D;
+}

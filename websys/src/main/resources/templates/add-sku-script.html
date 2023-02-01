@@ -1,0 +1,51 @@
+<script type="text/x-template" id="add-sku">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form @submit="checkForm" method="post">
+                    <div class="form-row">
+                        <div class="form-group col-md-12 mb-1 mt-3">
+                            <h4>Dados da Variação</h4>
+                        </div>
+                        <div class="form-group col-md-6 mb-4">
+                            <label>Nome</label>
+                            <input v-model="name"  v-bind:class="getClassValidation(name, 'required')" type="text" class="form-control" placeholder="">
+                        </div>
+                        
+                        <div class="form-group col-md-6 mb-4">
+                            <label>Produto <a href="javascript:;" v-on:click="selectProduct()">procurar</a></label>
+                            <select class="form-control" v-model="productId" v-bind:class="getClassValidation(productId, 'required')"  >
+                                <option v-for="elm in products" v-bind:value="elm.id" >
+                                    {{elm.name}}
+                                </option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Código</label>
+                            <input v-model="externalId" type="text" class="form-control" placeholder="">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Estoque</label>
+                            <input v-model="estoque" type="number" class="form-control" placeholder="">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Estoque Mínimo</label>
+                            <input v-model="estoqueMin" type="number" class="form-control" placeholder="">
+                        </div>
+                        
+                        
+                        
+                        
+                    </div>
+                    <button type="submit" class="btn btn-primary">{{buttonText()}}</button>
+                    <br />
+                    <br />
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</script>

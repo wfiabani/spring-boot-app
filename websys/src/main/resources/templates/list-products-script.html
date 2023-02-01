@@ -1,0 +1,55 @@
+<script type="text/x-template" id="list-products">
+    <div class="container-fluid">
+        <div class="row mb-4 mt-3">
+            <div class="col-md-6">
+                <button v-on:click="addProducts()" class="btn btn-primary">Adicionar Produtos</button>
+            </div>
+            <div class="col-md-6">
+                <form @submit="filter" class="form-inline justify-content-end">
+                    <div class="form-group">
+                        <label>Filtrar produtos</label>
+                        <input v-model="searchParam" type="text" class="form-control ml-2" placeholder="Palavra chave + enter">
+                        <!--<button type="submit" class="btn btn-primary ml-2">Filtrar</button>
+                            <button v-on:click="searchParam=''; filter();" type="button" class="btn btn-secondary ml-2">Limpar</button>-->
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 pl-0 pr-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Nome</th>
+                                <th>Código</th>
+                                <th>Categoria</th>
+                                <th>Opções</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in filteredItems">
+                                <td>{{item.id}}</td>
+                                <td>{{item.name}}</td>
+                                <td>{{item.externalId}}</td>
+                                <td>{{item.productCategoryName}}</td>
+                                <td>
+                                    <a v-show="movement==true" href="javascript:;" v-on:click="select(item)"><i class="far fa-check-circle"></i></a>
+                                    &nbsp;
+                                    <a href="javascript:;" v-on:click="duplicate(item.id)"><i class="fas fa-copy"></i></a>
+                                    &nbsp;
+                                    <a href="javascript:;" v-on:click="edit(item.id)"><i class="fa fa-pencil-alt"></i></a>
+                                    &nbsp;
+                                    <a href="javascript:;" v-on:click="remove(item.id)"><i class="fa fa-trash-alt"></i></a>
+                                    &nbsp;
+                                    <a href="javascript:;" v-on:click="openSKUS(item.id)"><i class="fa fa-tags"></i></a>
+                                    <!--<a data-spa v-bind:href="'/skus/list/' + item.id"><i class="fa fa-tags"></i></a>-->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

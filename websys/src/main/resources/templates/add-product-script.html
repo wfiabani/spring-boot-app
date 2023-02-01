@@ -1,0 +1,103 @@
+<script type="text/x-template" id="add-product">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form @submit="checkForm" method="post">
+                    <div class="form-row">
+                        <div class="form-group col-md-12 mb-1 mt-3">
+                            <h4>Dados do Produto</h4>
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Nome *</label>
+                            <input v-model="name"  v-bind:class="getClassValidation(name, 'required')" type="text" class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Código</label>
+                            <input v-model="externalId" type="text" class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Unidade Comercial *</label>
+                            <select class="form-control" v-model="uCom" v-bind:class="getClassValidation(uCom, 'required')" >
+                                <option v-for="elm in unidadesComerciais" v-bind:value="elm.value">{{elm.text}}</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Categoria *</label>
+                            <select class="form-control" v-model="productCategoryId" >
+                                <option v-for="elm in productCategories" v-bind:value="elm.id" >{{elm.name}}</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Preço de Compra *</label>
+                            <input v-model.lazy="cost" v-bind:class="getClassValidation(cost, 'money')" money type="text" class="form-control text-right" placeholder="0.00">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Preço de Venda *</label>
+                            <input v-model.lazy="price" v-bind:class="getClassValidation(price, 'money')" money type="text" class="form-control text-right" placeholder="0.00">
+                        </div>
+                        
+                        <div class="form-group col-md-6 mb-4">
+                            <input id="trackStock" name="trackStock" type="checkbox" v-model="trackStock">
+                            <label class="form-check-label" for="trackStock">Controlar estoque</label>
+                        </div>
+                        
+                        <div class="form-group col-md-12 mb-1 mt-3">
+                            <h4>Dados Fiscais</h4>
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>NCM</label>
+                            <input v-model="ncm" type="text" class="form-control" placeholder="somente números">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>CEST</label>
+                            <input v-model="cest" type="text" class="form-control" placeholder="somente números">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>EAN</label>
+                            <input v-model="ean" type="text" class="form-control" placeholder="somente números">
+                        </div>
+                        
+                        <div class="form-group col-md-6 mb-4">
+                            <label>Unidade Tributável</label>
+                            <select class="form-control" v-model="uTrib"><!-- este não é obrigatório -->
+                                <option v-for="elm in unidadesComerciais" v-bind:value="elm.value">{{elm.text}}</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group col-md-6 mb-4">
+                            <label>EAN Tributado</label>
+                            <input v-model="eanTrib" type="text" class="form-control" placeholder="somente números">
+                        </div>
+                        
+                        <div class="form-group col-md-6 mb-4">
+                            <label>Preço de Venda por Unidade Tributável</label>
+                            <input v-model.lazy="priceUnTrib" v-bind:class="getClassValidation(priceUnTrib, 'money')" money type="text" class="form-control text-right" placeholder="0.00">
+                        </div>
+
+                        <div class="form-group col-md-6 mb-4">
+                            <label>Grupo Tributável</label>
+                            <input v-model="grupoTrib" type="text" class="form-control">
+                        </div>
+                        
+                        
+                        
+                        
+                    </div>
+                    <button type="submit" class="btn btn-primary">{{buttonText()}}</button>
+                    <br />
+                    <br />
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</script>

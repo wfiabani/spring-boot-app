@@ -1,0 +1,44 @@
+<script type="text/x-template" id="view-nfe">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12 mb-1 mt-3">
+                        <h4>Dados da Nota Fiscal</h4>
+                    </div>
+                    <div class="col-md-12 mb-4">
+                        <span><b>Destinatário:</b> {{xNome}}</span><br />
+                        <span><b>Data de emissão:</b> {{dhEmi}}</span><br />
+                        <span><b>Número NF:</b> {{nNF}}</span><br />
+                        <span><b>Natureza da operação:</b> {{natOp}}</span><br />
+                        <span><b>Código do Status:</b> {{cStat}}</span><br />
+                        <span><b>Status:</b> {{xMotivo}}</span><br />
+                        <br />
+                        <span><b>Chave de acesso:</b> {{chNFe}}</span><br />
+                        <span><b>Protocolo:</b> {{nProt}}</span><br />
+                    </div>
+                    <div class="col-md-12 ">
+                        <button type="button" v-on:click="downloadDanfe()" class="btn btn-primary">Baixar DANFE</button>
+                        <button type="button" v-on:click="downloadNotaXml()" class="btn btn-primary ml-2">Baixar XML</button>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12 mb-1 mt-4">
+                        <h4>Enviar DANFE e XML</h4>
+                    </div>
+                </div>
+                <form class="form-inline" @submit="checkForm" method="post">
+                    
+                    <div class="form-row">
+                        <div class="form-group col-md-12 mb-4">
+                            <label>E-mail *</label>
+                            <input v-model="to" v-bind:class="getClassValidation(to, 'required')" type="mail" class="form-control ml-2"></input>
+                            <button type="submit" class="btn btn-primary ml-2">{{buttonText()}}</button>
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</script>

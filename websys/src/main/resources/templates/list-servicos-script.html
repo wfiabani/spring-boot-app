@@ -1,0 +1,48 @@
+<script type="text/x-template" id="list-servicos">
+    <div class="container-fluid">
+        <div class="row mb-4 mt-3">
+            <div class="col-md-6">
+                <button v-on:click="addServicos()" class="btn btn-primary">Adicionar Serviços</button>
+            </div>
+            <div class="col-md-6">
+                <form @submit="filter" class="form-inline justify-content-end">
+                    <div class="form-group">
+                        <label>Filtrar serviços</label>
+                        <input v-model="searchParam" type="text" class="form-control ml-2" placeholder="Palavra chave + enter">
+                        <!--<button type="submit" class="btn btn-primary ml-2">Filtrar</button>
+                            <button v-on:click="searchParam=''; filter();" type="button" class="btn btn-secondary ml-2">Limpar</button>-->
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 pl-0 pr-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Serviço</th>
+                                <th>Preço</th>
+                                <th>Opções</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in filteredItems">
+                                <td>{{item.id}}</td>
+                                <td>{{item.name}}</td>
+                                <td>R$ {{item.price}}</td>
+                                <td>
+                                    <a v-show="movement==true" href="javascript:;" v-on:click="select(item)"><i class="far fa-check-circle"></i></a>
+                                    &nbsp;
+                                    <a href="javascript:;" v-on:click="edit(item.id)"><i class="fa fa-pencil-alt"></i></a>
+                                    &nbsp;
+                                    <a href="javascript:;" v-on:click="remove(item.id)"><i class="fa fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

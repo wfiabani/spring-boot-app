@@ -1,0 +1,105 @@
+<script type="text/x-template" id="add-fixed-account">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <form @submit="checkForm" method="post">
+                        <div class="form-row">
+                            <div class="form-group col-md-12 mb-1 mt-3">
+                                <h4>Dados da Conta</h4>
+                            </div>
+                            
+                            <div class="form-group col-md-6 mb-4">
+                                <label>Descrição *</label>
+                                <input v-model="name"  v-bind:class="getClassValidation(name, 'required')" type="text" class="form-control">
+                            </div>
+                            
+                            <div class="form-group col-md-6 mb-4">
+                                <label>Código</label>
+                                <input v-model="externalId" type="text" class="form-control">
+                            </div>
+                            
+                            <div class="form-group col-md-4 mb-4">
+                                <label>Valor *</label>
+                                <input v-model.lazy="value" v-bind:class="getClassValidation(value, 'money')" money type="text" class="form-control text-right" placeholder="0.00">
+                            </div>
+                            
+                            <div class="form-group col-md-4 mb-4">
+                                <label>Tipo *</label>
+                                <select class="form-control" v-model="type" v-bind:class="getClassValidation(type, 'required')" >
+                                    <option v-for="elm in types" v-bind:value="elm.value">{{elm.text}}</option>
+                                </select>
+                            </div>
+                            
+                            
+                            <div class="form-group col-md-4 mb-4">
+                                <label>Dia de Vencimento *</label>
+                                <input v-model="expirationDay" v-bind:class="getClassValidation(expirationDay, 'dayOfMonth')" type="number" class="form-control" placeholder="">
+                            </div>
+                            
+                            
+                            
+                            <div class="form-group col-md-6 mb-4">
+                                <label>Início *</label>
+                                <input v-model.lazy="enabledDate"  v-bind:class="getClassValidation(enabledDate, 'date')" date type="text" class="form-control" placeholder="00/00/0000">
+                            </div>
+                            
+                            <div class="form-group col-md-6 mb-4">
+                                <label>Fim</label>
+                                <input v-model.lazy="disabledDate"  v-bind:class="getClassValidation(disabledDate, 'dateNotRequired')" date type="text" class="form-control" placeholder="00/00/0000">
+                            </div>
+                            
+                            
+                            <div class="form-group col-md-12 mb-1 mt-3">
+                                <h4>Meses Recorrentes Anualmente</h4>
+                            </div>
+                            
+                            <div class="form-group col-md-6 mb-4">
+                                <input id="repeatJAN" name="repeatJAN" type="checkbox" v-model="repeatJAN">
+                                <label class="form-check-label" for="repeatJAN">Janeiro</label><br />
+                                
+                                <input id="repeatFEV" name="repeatFEV" type="checkbox" v-model="repeatFEV">
+                                <label class="form-check-label" for="repeatFEV">Fevereiro</label><br />
+                                
+                                <input id="repeatMAR" name="repeatMAR" type="checkbox" v-model="repeatMAR">
+                                <label class="form-check-label" for="repeatMAR">Março</label><br />
+                                
+                                <input id="repeatAPR" name="repeatAPR" type="checkbox" v-model="repeatAPR">
+                                <label class="form-check-label" for="repeatAPR">Abril</label><br />
+                                
+                                <input id="repeatMAY" name="repeatMAY" type="checkbox" v-model="repeatMAY">
+                                <label class="form-check-label" for="repeatMAY">Maio</label><br />
+                                
+                                <input id="repeatJUN" name="repeatJUN" type="checkbox" v-model="repeatJUN">
+                                <label class="form-check-label" for="repeatJUN">Junho</label><br />
+                                
+                                <input id="repeatJUL" name="repeatJUL" type="checkbox" v-model="repeatJUL">
+                                <label class="form-check-label" for="repeatJUL">Julho</label><br />
+                                
+                                <input id="repeatAGO" name="repeatAGO" type="checkbox" v-model="repeatAGO">
+                                <label class="form-check-label" for="repeatAGO">Agosto</label><br />
+                                
+                                <input id="repeatSET" name="repeatSET" type="checkbox" v-model="repeatSET">
+                                <label class="form-check-label" for="repeatSET">Setembro</label><br />
+                                
+                                <input id="repeatOCT" name="repeatOCT" type="checkbox" v-model="repeatOCT">
+                                <label class="form-check-label" for="repeatOCT">Outubro</label><br />
+                                
+                                <input id="repeatNOV" name="repeatNOV" type="checkbox" v-model="repeatNOV">
+                                <label class="form-check-label" for="repeatNOV">Novembro</label><br />
+                                
+                                <input id="repeatDEC" name="repeatDEC" type="checkbox" v-model="repeatDEC">
+                                <label class="form-check-label" for="repeatDEC">Dezembro</label><br />
+                            </div>
+                            
+                            
+                            
+                        </div>
+                        <button type="submit" class="btn btn-primary">{{buttonText()}}</button>
+                        <br />
+                        <br />
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </script>

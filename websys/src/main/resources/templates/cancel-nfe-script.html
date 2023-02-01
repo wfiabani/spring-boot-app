@@ -1,0 +1,44 @@
+<script type="text/x-template" id="cancel-nfe">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form @submit="checkForm" method="post">
+                    <div class="form-row">
+                        <div class="form-group col-md-12 mb-1 mt-3">
+                            <p>
+                                Confirmar cancelar esta nota fiscal?<br />Atenção: Esta operação pode gerar multas. Se você está em dúvidas, consulte nosso suporte contábil.
+                            </p>
+                        </div>
+                        <div class="col-md-12 mb-4">
+                            <span><b>Destinatário:</b> {{xNome}}</span><br />
+                            <span><b>Data de emissão:</b> {{dhEmi}}</span><br />
+                            <span><b>Número NF:</b> {{nNF}}</span><br />
+                            <span><b>Natureza da operação:</b> {{natOp}}</span><br />
+                            <span><b>Código do Status:</b> {{cStat}}</span><br />
+                            <span><b>Status:</b> {{xMotivo}}</span><br />
+                            <br />
+                            <span><b>Chave de acesso:</b> {{chNFe}}</span><br />
+                            <span><b>Protocolo:</b> {{nProt}}</span><br />
+                        </div>
+                        <div class="form-group col-md-6 mb-4">
+                            <label>Chave *</label>
+                            <input v-model="chNFe" v-on:keyup="handleChangeChave" v-bind:class="getClassValidation(chNFe, 'required')" type="text" class="form-control">
+                        </div>
+                        <div class="form-group col-md-6 mb-4">
+                            <label>Protocolo *</label>
+                            <input v-model="nProt"  v-bind:class="getClassValidation(nProt, 'required')" type="text" class="form-control">
+                        </div>
+                        <div class="form-group col-md-12 mb-4">
+                            <label>Motivo *</label>
+                            <input v-model="just"  v-bind:class="getClassValidation(just, 'required')" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">{{buttonText()}}</button>
+                    <br />
+                    <br />
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</script>

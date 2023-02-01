@@ -1,0 +1,215 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Websys</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+    <!-- CDNs -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/front-end/bower_components/bootstrap/dist/css/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/front-end/custom/css/bootstrap-custom.css}" />
+    
+</head>
+<body>
+    
+    <div id="app">
+        <div id="left-menu">
+            <a data-spa="true" id="home-item-menu" href="/home/desktop" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="Home">
+                <i class="material-icons">leaderboard</i>
+            </a>
+
+            <a data-spa="true" id="accounts-item-menu" href="/accounts/list" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="Contas Únicas">
+                <i class="material-icons">account_balance_wallet</i>
+            </a>
+            <a data-spa="true" id="accounts-item-menu2" href="/fixed-accounts/list" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="Contas Recorrentes">
+                <i class="material-icons">currency_exchange</i>
+            </a>
+<!--            <a data-spa="true" id="products-item-menu" href="/products/list" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="Produtos">-->
+<!--                <i class="material-icons">inventory_2</i>-->
+<!--            </a>-->
+<!--            <a data-spa="true" id="skus-item-menu" href="/skus/list" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="Variações de Produtos">-->
+<!--                <i class="material-icons">category</i>-->
+<!--            </a>-->
+<!--            <a data-spa="true" id="cadastros-item-menu" href="/cadastros/list" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="Cadastros">-->
+<!--                <i class="material-icons">manage_accounts</i>-->
+<!--            </a>-->
+<!--            <a data-spa="true" id="servicos-item-menu" href="/servicos/list" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="Serviços">-->
+<!--                <i class="material-icons">bolt</i>-->
+<!--            </a>-->
+<!--            <a data-spa="true" id="movements-item-menu" href="/movements/list/v" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="Vendas">-->
+<!--                <i class="material-icons">local_mall</i>-->
+<!--            </a>-->
+
+<!--            <a data-spa="true" id="movements-item-menu" href="/movements/list/c" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="Compras">-->
+<!--                <i class="material-icons">shopping_cart</i>-->
+<!--            </a>-->
+
+
+<!--            <a data-spa="true" id="nfes-menu" href="/nfe/list/" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="Notas Fiscais">-->
+<!--                <i class="fas fa-receipt"></i>-->
+<!--            </a>-->
+            
+            <a data-spa="false" id="exit-item-menu" href="javascript:logout();" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="Sair">
+                <i class="material-icons">exit_to_app</i>
+            </a>
+        </div>
+        <div id="content">
+            <!-- <div th:replace="ajax-layout"></div> -->
+        </div>
+    </div>
+    
+    
+    
+    
+    
+    <!-- bootstrap popup -->
+    <div class="modal fade" id="modal-0" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-1" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-2" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-3" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <!-- vuejs x-templates -->
+    <script th:replace="estoque-script"></script>
+    <script th:replace="home-script"></script>
+    <script th:replace="resumo-financeiro-sintetico-script"></script>
+    <script th:replace="xml-loader-script"></script>
+    <script th:replace="ajustar-estoque-script"></script>
+    <script th:replace="add-payment-script"></script>
+    <script th:replace="add-product-script"></script>
+    <script th:replace="add-account-script"></script>
+    <script th:replace="add-fixed-account-script"></script>
+    <script th:replace="add-movement-script"></script>
+    <script th:replace="add-sku-script"></script>
+    <script th:replace="list-products-script"></script>
+    <script th:replace="list-movements-script"></script>
+    <script th:replace="list-skus-script"></script>
+    <script th:replace="list-accounts-script"></script>
+    <script th:replace="list-fixed-accounts-script"></script>
+    <script th:replace="add-cadastro-script"></script>
+    <script th:replace="view-nfe-script"></script>
+    <script th:replace="cancel-nfe-script"></script>
+    <script th:replace="add-nfe-script"></script>
+    <script th:replace="add-servico-script"></script>
+    <script th:replace="list-cadastros-script"></script>
+    <script th:replace="list-nfe-script"></script>
+    <script th:replace="list-servicos-script"></script>
+    
+    
+    
+    <script type="text/x-template" id="add-products">
+        <div><add-product v-bind:pk="0"></add-product></div>
+    </script>
+    
+    <script type="text/x-template" id="add-movements">
+        <div><add-movement v-bind:pk="0"></add-movement></div>
+    </script>
+    
+    <script type="text/x-template" id="add-skus">
+        <div><add-sku v-bind:pk="0"></add-sku></div>
+    </script>
+    
+    <script type="text/x-template" id="add-cadastros">
+        <div><add-cadastro v-bind:pk="0"></add-cadastro></div>
+    </script>
+    
+    <script type="text/x-template" id="add-servicos">
+        <div><add-servico v-bind:pk="0"></add-servico></div>
+    </script>
+    
+    
+    
+    
+    <!-- vars -->
+    <script>var BASEURL = '/';</script>
+    
+    
+    
+    
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script th:src="@{/front-end/bower_components/jquery/dist/jquery.min.js}"></script>
+    
+    <!-- CDNs -->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+    <script th:src="@{/front-end/bower_components/popper.js/dist/popper.min.js}"></script>
+    <script th:src="@{/front-end/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+    
+    <!-- custom js-->
+    <script th:src="@{/front-end/custom/js/default.js}"></script>
+    
+    
+    
+</body>
+</html>

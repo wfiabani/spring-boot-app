@@ -1,0 +1,42 @@
+<script type="text/x-template" id="resumo-financeiro-sintetico">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-12 mt-3">
+                <form @submit="checkForm" method="post">
+                    <div class="form-row">
+                        <div class="form-group col-md-3 mb-3">
+                            <label>Mês/Ano Inicial</label>
+                            <input v-model.lazy="initDate" month v-bind:class="getClassValidation(initDate, 'month')" type="text" placeholder="00/0000" class="form-control" maxlength="7">
+                        </div>
+                        <div class="form-group col-md-3 mb-3">
+                            <label>Mês/Ano Final</label>
+                            <input v-model.lazy="endDate" month v-bind:class="getClassValidation(endDate, 'month')" type="text" placeholder="00/0000" class="form-control" maxlength="7">
+                        </div>
+                        <div class="form-group col-md-4 "></div>
+                        <div class="form-group col-md-2 mb-3 mt-3 pt-3">
+                            <button type="submit" class="btn btn-primary btn-block">{{buttonText()}}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12 mt-3">
+
+                <div class="container-finances">
+
+                        <div v-for="item in competences">
+                            <div v-bind:style="{ 'height': item.percentR+'%' }">R$ {{item.resumo.totalReceber}}</div>
+                            <span>{{item.month}}</span>
+                            <div v-bind:style="{ 'height': item.percentP+'%' }">R$ {{item.resumo.totalPagar}}</div>
+                        </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</script>

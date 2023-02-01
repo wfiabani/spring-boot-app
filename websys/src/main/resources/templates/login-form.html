@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Websys</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous" />
+
+    <link rel="stylesheet" th:href="@{/front-end/bower_components/bootstrap/dist/css/bootstrap.css}" />
+</head>
+<body>
+
+
+    <div class="clearfix"><br /><br /></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Identifique-se</h3>
+                </div>
+                <div class="card-body">
+                    <form class="form" id="login-form" method="POST">
+                        <div class="alert alert-warning d-none" role="alert" id="message"></div>
+                        <div class="form-group">
+                            <label for="login">Login</label>
+                            <input type="text" class="form-control"  id="login" required>
+                            <div class="invalid-feedback">Informe um login válido</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Senha</label>
+                            <input type="password" class="form-control" id="password" required>
+                            <div class="invalid-feedback">Informe uma senha válida</div>
+                        </div>
+                        <button id="bt-enviar" type="submit" class="btn btn-primary float-right">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <script>var BASEURL = '/';</script>
+    <script th:src="@{/front-end/bower_components/jquery/dist/jquery.min.js}"></script>
+    <script th:src="@{/front-end/bower_components/popper.js/dist/popper.js}"></script>
+    <script th:src="@{/front-end/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+
+    <script>
+        var sending = false;
+        $("#login-form").submit(function(event){
+            event.preventDefault();
+            if(!sending){
+                sending = true;
+
+                $("#message").addClass("d-none");
+                $("#bt-enviar").html("Aguarde...");
+
+                $.ajax({
+                    type: "POST",
+                    url: BASEURL+'security/login',
+                    dataType: 'text',
+                    data: {
+                        login: $('#login').val(),
+                        password: $('#password').val()
+                    },
+                    success: function(data){
+                        sending = false;
+                        if(data=="true"){
+                            //parent.location = "/products/list";
+                            parent.location = "/home/desktop";
+                        }else{
+                            $("#bt-enviar").html("Login");
+                            $("#message").removeClass("d-none").html("Usuário e/ou senha incorretos");
+                        }
+                    }
+                });
+            }
+        });
+        $("#login").get(0).focus();
+    </script>
+
+</body>
+</html>

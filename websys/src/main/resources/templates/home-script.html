@@ -1,0 +1,208 @@
+<script type="text/x-template" id="home">
+    <div class="container-fluid">
+        
+        
+        <div class="row">
+            <div class="col-md-12 mt-3">
+                <form @submit="checkForm"  method="post">
+                    <div class="form-row">
+                        <div class="form-group col-md-3 mb-3">
+                            <label>Mês/Ano</label>
+                            <input v-model.lazy="month"  v-bind:class="getClassValidation(month, 'month')" month type="text" class="form-control" placeholder="00/0000">
+                        </div>
+                        <div class="form-group col-md-1 "></div>
+                        <div class="form-group col-md-3 mb-3 pt-4 mt-3">
+                            <input id="showPaid" name="showPaid" type="checkbox" v-model="paid">
+                            <label class="form-check-label" for="showPaid">Exibir contas pagas</label>
+                        </div>
+                        <div class="form-group col-md-3 mb-3 pt-4 mt-3">
+                            <input id="showOpen" name="showOpen" type="checkbox" v-model="open">
+                            <label class="form-check-label" for="showOpen">Exibir contas em aberto</label>
+                        </div>
+                        <div class="form-group col-md-2 mb-3 mt-3 pt-3">
+                            <button type="submit" class="btn btn-primary btn-block">{{buttonText()}}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        
+        <div class="row">
+            <div class="col-md-2 mt-2 mb-2">
+                <div class="card text-white bg-primary">
+                    <div class="card-header">Total a Receber</div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            R$ {{resumo.totalReceber}}
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-2 mt-2 mb-2">
+                <div class="card text-white bg-danger">
+                    <div class="card-header">Total a Pagar</div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            R$ {{resumo.totalPagar}}
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            
+            
+            
+            <div class="col-md-2 mt-2 mb-2">
+                <div class="card text-white bg-info">
+                    <div class="card-header">Total Pago</div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            R$ {{resumo.totalPago}}
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="col-md-2 mt-2 mb-2">
+                <div class="card text-white bg-warning">
+                    <div class="card-header">Total Recebido</div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            R$ {{resumo.totalRecebido}}
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-2 mt-2 mb-2">
+                <div class="card text-white bg-dark">
+                    <div class="card-header">Lucro Estimado</div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            R$ {{resumo.lucroEstimado}}
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-2 mt-2 mb-2">
+                <div class="card text-white bg-success">
+                    <div class="card-header">Lucro Efetivo</div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            R$ {{resumo.lucroEfetivo}}
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        
+        <div class="row mb-4 mt-3">
+            <div class="col-md-12">
+                <div class="card w-100 mb-4">
+                    <div class="card-header"><h5>Contas a pagar</h5></div>
+                    
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Status</th>
+                                <th>Tipo</th>
+                                <th>Vencimento</th>
+                                <th class="text-right" >Valor R$</th>
+                                <th class="text-right" >Valor pago R$</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="account in contasPagar" v-if="(account.paid && paid) || (!account.paid && open)">
+                                <td>{{account.name}}</td>
+                                <td>
+                                    <span v-if="account.paid && account.total==account.totalPago" class="badge badge-info">Pago</span>
+                                    <span v-if="account.paid && account.total!=account.totalPago" class="badge badge-warning">Parcialmente pago</span>
+                                    <span v-if="!account.paid" class="badge badge-danger">Em aberto</span>
+                                </td>
+                                <td v-if="account.fixed"><span class="badge badge-dark">Conta Recorrente</span></td>
+                                <td v-if="!account.fixed"><span class="badge badge-primary">Conta Única</span></td>
+                                <td>{{account.expirationDate}}</td>
+                                <td class="text-right">{{account.total}}</td>
+                                <td class="text-right">{{account.totalPago}}</td>
+                                <td v-if="account.fixed" class="text-right">
+                                    <a href="javascript:;" v-on:click="editFixedAccount(account.id, month)"><i class="fa fa-pencil-alt"></i></a>
+                                    &nbsp;
+                                </td>
+                                <td v-if="!account.fixed" class="text-right">
+                                    <a href="javascript:;" v-on:click="editAccount(account.id)"><i class="fa fa-pencil-alt"></i></a>
+                                    &nbsp;
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                </div>        
+            </div>    
+        </div>
+        
+        
+        
+        <div class="row mb-1 mt-3">
+            <div class="col-md-12">
+                <div class="card w-100 mb-4">
+                    <div class="card-header"><h5>Contas a receber</h5></div>
+                    
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Status</th>
+                                <th>Tipo</th>
+                                <th>Vencimento</th>
+                                <th class="text-right" >Valor R$</th>
+                                <th class="text-right" >Valor pago R$</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="account in contasReceber" v-if="(account.paid && paid) || (!account.paid && open)">
+                                <td>{{account.name}}</td>
+                                <td>
+                                    <span v-if="account.paid && account.total==account.totalPago" class="badge badge-info">Pago</span>
+                                    <span v-if="account.paid && account.total!=account.totalPago" class="badge badge-warning">Parcialmente pago</span>
+                                    <span v-if="!account.paid" class="badge badge-danger">Em aberto</span>
+                                </td>
+                                
+                                <td v-if="account.fixed"><span class="badge badge-dark">Conta Recorrente</span></td>
+                                <td v-if="!account.fixed"><span class="badge badge-primary">Conta Única</span></td><td>{{account.expirationDate}}</td>
+                                <td class="text-right">{{account.total}}</td>
+                                <td class="text-right">{{account.totalPago}}</td>
+                                <td class="text-right">
+                                    <td v-if="account.fixed" class="text-right">
+                                        <a href="javascript:;" v-on:click="editFixedAccount(account.id, month)"><i class="fa fa-pencil-alt"></i></a>
+                                        &nbsp;
+                                    </td>
+                                    <td v-if="!account.fixed" class="text-right">
+                                        <a href="javascript:;" v-on:click="editAccount(account.id)"><i class="fa fa-pencil-alt"></i></a>
+                                        &nbsp;
+                                    </td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                </div>        
+            </div>    
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <button v-on:click="getFinancesReport" type="button" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> &nbsp;Relatório Financeiro Analítico</button>
+            </div>
+        </div>
+
+    </div>
+</script>

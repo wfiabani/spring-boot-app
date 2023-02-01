@@ -1,0 +1,371 @@
+<script type="text/x-template" id="add-nfe">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                
+                
+                <form v-show="mid==''" class="form-inline" @submit="loadMovement" method="post">
+                    
+                    <div class="form-row">
+                        <div class="form-group col-md-12 mb-4">
+                            <label>Código do Movimento *</label>
+                            <input v-model="movementId" v-bind:class="getClassValidation(movementId, 'required')" type="text" class="form-control ml-2"></input>
+                            <button type="submit" class="btn btn-primary ml-2">{{buttonSearchMovText()}}</button>
+                        </div>
+                    </div>
+                    
+                </form>
+                
+                <form @submit="checkForm" method="post">
+                    
+                    <div id="accordion">
+                        <div class="card mb-3">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#dadosNF" aria-expanded="true" aria-controls="collapseOne">Dados da Nota Fiscal</button>
+                                </h5>
+                            </div>
+                            <div id="dadosNF" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12 mb-1 mt-3">
+                                            <h4>Dados da Nota Fiscal</h4>
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>Natureza da Operação</label>
+                                            <input v-model="nf.natOp"  v-bind:class="getClassValidation(nf.natOp, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>Tipo de Movimentação</label>
+                                            <select class="form-control" v-model="nf.tpNF" >
+                                                <option v-for="elm in tpNFOptions" v-bind:value="elm.value">{{elm.text}}</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>Tipo de Operação</label>
+                                            <select class="form-control" v-model="nf.idDest" >
+                                                <option v-for="elm in idDestOptions" v-bind:value="elm.value">{{elm.text}}</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>Tipo de Impressão</label>
+                                            <select class="form-control" v-model="nf.tpImp" >
+                                                <option v-for="elm in tpImpOptions" v-bind:value="elm.value">{{elm.text}}</option>
+                                            </select>
+                                        </div>
+                                        
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>Modelo</label>
+                                            <select class="form-control" v-model="nf.mod" >
+                                                <option v-for="elm in modOptions" v-bind:value="elm.value">{{elm.text}}</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>Indicador Presencial</label>
+                                            <select class="form-control" v-model="nf.indPres" >
+                                                <option v-for="elm in indPresOptions" v-bind:value="elm.value">{{elm.text}}</option>
+                                            </select>
+                                        </div>
+                                        
+                                        
+                                        <div class="form-group col-md-12 mb-4">
+                                            <label>Finalidade</label>
+                                            <select class="form-control" v-model="nf.finNFe" >
+                                                <option v-for="elm in finNFeOptions" v-bind:value="elm.value">{{elm.text}}</option>
+                                            </select>
+                                        </div>
+
+                                        <div v-show="nf.finNFe!=1" class="form-group col-md-12 mb-4">
+                                            <label>Chave da Nota Fiscal Referenciada</label>
+                                            <input v-model="nf.refNFe"  v-bind:class="getClassValidation(nf.refNFe, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>Modalidade de Frete</label>
+                                            <select class="form-control" v-model="nf.modFrete" >
+                                                <option v-for="elm in modFreteOptions" v-bind:value="elm.value">{{elm.text}}</option>
+                                            </select>
+                                        </div>
+
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>Valor do Frete</label>
+                                            <input v-model.lazy="nf.vFrete" v-bind:class="getClassValidation(nf.vFrete, 'money')" money type="text" class="form-control text-right" placeholder="0.00">
+                                        </div>
+
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>Outros Custos</label>
+                                            <input v-model.lazy="nf.vOutro" v-bind:class="getClassValidation(nf.vOutro, 'money')" money type="text" class="form-control text-right" placeholder="0.00">
+                                        </div>
+
+
+                                        <div class="form-group col-md-3 mb-4">
+                                            <label>Tipo de Pagamento</label>
+                                            <select class="form-control" v-model="nf.tPag" >
+                                                <option v-for="elm in tPagOptions" v-bind:value="elm.value">{{elm.text}}</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group col-md-3 mb-4">
+                                            <label>Valor total da NF</label>
+                                            <input v-model.lazy="nf.vNF" v-bind:class="getClassValidation(nf.vNF, 'money')" money type="text" class="form-control text-right" placeholder="0.00">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-3 mb-4">
+                                            <label>Valor Pago</label>
+                                            <input id="nfvPag" v-model.lazy="nf.vPag" v-bind:class="getClassValidation(nf.vPag, 'money')" money type="text" class="form-control text-right" placeholder="0.00">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-3 mb-4">
+                                            <label>Troco</label>
+                                            <input v-model.lazy="nf.vTroco" v-bind:class="getClassValidation(nf.vTroco, 'money')" money type="text" class="form-control text-right" placeholder="0.00">
+                                        </div>
+
+                                        
+                                        <div class="form-group col-md-6 mb-4">
+                                            <label>Informações adicionais</label>
+                                            <textarea v-model="nf.infAdFisco" class="form-control" rows="2"></textarea>
+                                        </div>
+                                        
+                                        <div class="form-group col-md-6 mb-4">
+                                            <label>Informações ao fisco</label>
+                                            <textarea v-model="nf.infCpl" class="form-control" rows="2"></textarea>
+                                        </div>
+                                        
+                                        <div class="form-group col-md-12 mb-4">
+                                            <input id="indFinal" name="indFinal" type="checkbox" v-model="nf.indFinal">
+                                            <label class="form-check-label" for="indFinal">Consumidor Final</label>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>    
+                        
+                        
+                        <div class="card mb-3">
+                            <div class="card-header" id="headingTwo">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-secondary col-auto" type="button" data-toggle="collapse" data-target="#itemsNF" aria-expanded="true" aria-controls="collapseOne">Itens</button>
+                                    <a class="col-auto" href="javascript:;" v-on:click="listSKUs()">adicionar</a>
+                                </h5>
+                            </div>
+                            <div id="itemsNF" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                <div class="card-body">
+                                    
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12 mb-1 mt-3">
+                                            <h4>Itens da Nota Fiscal</h4>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                    <div class="form-row " v-for="(item, index) in items">
+                                        <div class="form-group col-md-12 mb-3 mt-3 border-bottom">
+                                            <h5>Item #{{index+1}}</h5>
+                                        </div>
+                                        
+                                        <div class="form-group col-md-6 mb-4" >
+                                            <label>Descrição</label>
+                                            <input v-model="item.xProd"  v-bind:class="getClassValidation(item.xProd, 'required')" type="text" class="form-control">
+                                        </div>
+                                        <div class="form-group col-md-6 mb-4" >
+                                            <label>Código</label>
+                                            <input v-model="item.cProd"  v-bind:class="getClassValidation(item.cProd, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-6 mb-4" >
+                                            <label>NCM</label>
+                                            <input v-model="item.NCM"  v-bind:class="getClassValidation(item.NCM, 'required')" type="text" class="form-control">
+                                        </div>
+                                        <div class="form-group col-md-6 mb-4" >
+                                            <label>CFOP</label>
+                                            <input v-model="item.CFOP"  v-bind:class="getClassValidation(item.CFOP, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4" >
+                                            <label>Unidade Comercial</label>
+                                            <select class="form-control" v-model="item.uCom" >
+                                                <option v-for="elm in unidadesComerciais" v-bind:value="elm.value">{{elm.text}}</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4" >
+                                            <label>Código EAN</label>
+                                            <input v-model="item.cEAN"  v-bind:class="getClassValidation(item.cEAN, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4" >
+                                            <label>Quantidade Comercializada</label>
+                                            <input v-model="item.qCom"  v-bind:class="getClassValidation(item.qCom, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4" >
+                                            <label>Unidade Comercial Tributada</label>
+                                            <select class="form-control" v-model="item.uTrib" >
+                                                <option v-for="elm in unidadesComerciais" v-bind:value="elm.value">{{elm.text}}</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4" >
+                                            <label>Código EAN Tributado</label>
+                                            <input v-model="item.cEANTrib" v-bind:class="getClassValidation(item.cEANTrib, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4" >
+                                            <label>Quantidade Tributada</label>
+                                            <input v-model="item.qTrib"  v-bind:class="getClassValidation(item.qTrib, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        
+                                        
+                                        
+                                        <div class="form-group col-md-6 mb-4" >
+                                            <label>Valor Unitário</label>
+                                            <input v-model.lazy="item.vUnCom" v-bind:class="getClassValidation(item.vUnCom, 'money')" money type="text" class="form-control text-right">
+                                        </div>
+                                        <div class="form-group col-md-6 mb-4" >
+                                            <label>Subtotal</label>
+                                            <input v-model.lazy="item.vProd" v-bind:class="getClassValidation(item.vProd, 'money')" money type="text" class="form-control text-right">
+                                        </div>
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        <div class="form-group col-md-6 mb-4" >
+                                            <button type="button" class="btn btn-primary btn-block" v-on:click="duplicateItem(index)">Duplicar</button>
+                                        </div>
+                                        <div class="form-group col-md-6 mb-4" >
+                                            <button type="button" class="btn btn-danger btn-block" v-on:click="removeItem(index)">Remover</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="card mb-3">
+                            <div class="card-header" id="headingTree">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-secondary col-auto" type="button" data-toggle="collapse" data-target="#dadosDest" aria-expanded="true" aria-controls="collapseOne">Destinatário</button>
+                                    <a class="col-auto" href="javascript:;" v-on:click="listCadastros()">selecionar</a>
+                                </h5>
+                            </div>
+                            <div id="dadosDest" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12 mb-1 mt-3">
+                                            <h4>Dados do Destinatário</h4>
+                                        </div>
+                                        
+                                        
+                                        
+                                        
+                                        <div class="form-group col-md-12 mb-4">
+                                            <label>Nome / Razão Social *</label>
+                                            <input v-model="dest.xNome"  v-bind:class="getClassValidation(dest.xNome, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        
+                                        
+                                        <div class="form-group col-md-6 mb-4">
+                                            <label>CPF</label>
+                                            <input v-model="dest.CPF" type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-6 mb-4">
+                                            <label>CNPJ</label>
+                                            <input v-model="dest.CNPJ" type="text" class="form-control">
+                                        </div>
+                                        
+                                        
+                                        
+                                        <div class="form-group col-md-6 mb-4">
+                                            <label>Indicação da IE do Destinatário</label>
+                                            <select class="form-control" v-model="dest.indIEDest" >
+                                                <option v-for="elm in indIEDestOptions" v-bind:value="elm.value">{{elm.text}}</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group col-md-6 mb-4">
+                                            <label>Inscrição Estadual</label>
+                                            <input v-model="dest.IE" type="text" class="form-control">
+                                        </div>
+                                        
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>Logradouro</label>
+                                            <input v-model="dest.xLgr" v-bind:class="getClassValidation(dest.xLgr, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>Número</label>
+                                            <input v-model="dest.nro" v-bind:class="getClassValidation(dest.nro, 'required')"  type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>Bairro</label>
+                                            <input v-model="dest.xBairro" v-bind:class="getClassValidation(dest.xBairro, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>Município</label>
+                                            <input v-model="dest.xMun" v-bind:class="getClassValidation(dest.xMun, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>UF</label>
+                                            <input v-model="dest.UF" v-bind:class="getClassValidation(dest.UF, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>CEP</label>
+                                            <input v-model="dest.CEP" v-bind:class="getClassValidation(dest.CEP, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>Código do Município</label>
+                                            <input v-model="dest.cMun" v-bind:class="getClassValidation(dest.cMun, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>País</label>
+                                            <input v-model="dest.xPais" v-bind:class="getClassValidation(dest.xPais, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                        <div class="form-group col-md-4 mb-4">
+                                            <label>Código do País</label>
+                                            <input v-model="dest.cPais" v-bind:class="getClassValidation(dest.cPais, 'required')" type="text" class="form-control">
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>    
+                        
+                        
+                        
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">{{buttonText()}}</button>
+                    <br />
+                    <br />
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</script>
+

@@ -1,0 +1,117 @@
+<script type="text/x-template" id="add-cadastro">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form @submit="checkForm" method="post">
+                    <div class="form-row">
+                        <div class="form-group col-md-12 mb-1 mt-3">
+                            <h4>Dados do Cadastro</h4>
+                        </div>
+                        
+                        <div class="form-group col-md-6 mb-4">
+                            <label>Nome / Razão Social *</label>
+                            <input v-model="name"  v-bind:class="getClassValidation(name, 'required')" type="text" class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-6 mb-4">
+                            <label>Nome Fantasia</label>
+                            <input v-model="nameFant"  type="text" class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-6 mb-4">
+                            <label>Telefone</label>
+                            <input v-model="telefone" type="text" class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-6 mb-4">
+                            <label>E-mail</label>
+                            <input v-model="email" type="text" class="form-control">
+                        </div>
+                        
+                        
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>CPF</label>
+                            <input v-model="cpf" type="text" class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>CNPJ</label>
+                            <input v-model="cnpj" type="text" class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Inscrição Estadual</label>
+                            <input v-model="ie" type="text" class="form-control">
+                        </div>
+                        
+                        
+                        <div class="form-group col-md-12 mb-1 mt-3">
+                            <h4>Endereço</h4>
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Logradouro</label>
+                            <input v-model="lgr" type="text" class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Número</label>
+                            <input v-model="num"  type="text" class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Bairro</label>
+                            <input v-model="bairro" type="text" class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Município</label>
+                            <input v-model="municipio" type="text" class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Código do Município</label>
+                            <input v-model="codMun" type="text" class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Estado *</label>
+                            <select class="form-control" v-model="uf" v-bind:class="getClassValidation(uf, 'required')" >
+                                <option v-for="elm in estados" v-bind:value="elm.value">{{elm.text}}</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Código do Pais</label>
+                            <input v-model="cPais" type="text" class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-4 mb-4">
+                            <label>Pais</label>
+                            <input v-model="pais" type="text" class="form-control">
+                        </div>
+
+                        <div class="form-group col-md-4 mb-4">
+                            <label>CEP</label>
+                            <input v-model="cep" type="text" class="form-control">
+                        </div>
+
+                        <div class="form-group col-md-6 mb-4">
+                            <label>Indicação da IE do Destinatário</label>
+                            <select class="form-control" v-model="indIEDest" >
+                                <option v-for="elm in indIEDestOptions" v-bind:value="elm.value">{{elm.text}}</option>
+                            </select>
+                        </div>
+                        
+                        
+                    </div>
+                    <button type="submit" class="btn btn-primary">{{buttonText()}}</button>
+                    <br />
+                    <br />
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</script>

@@ -1,0 +1,8 @@
+websys/src/test
+websys/src/main/resources/static/front-end/bower_components
+websys/src/main/resources/static/front-end/dist
+websys/src/main/resources/static/front-end/node_modules
+websys/src/main/resources/static/front-end/vendor
+websys/src/main/resources/static/_bootstrap4
+websys/target
+.idea
